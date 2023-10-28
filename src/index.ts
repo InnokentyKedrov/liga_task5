@@ -62,5 +62,5 @@ class Facade {
 // Метод запроса (fetch или XMLHttpRequest) меняется в зависимости от аргумента,
 // передаваемого в конструктор класса Facade ("fetch" или "xml")
 
-const work = new Facade('fetch');
-work.getTask(40);
+const work = new Facade('xml');
+work.getAllTasks();
