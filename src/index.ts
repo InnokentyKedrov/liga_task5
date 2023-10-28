@@ -1,5 +1,7 @@
 import FetchClass from './fetchClass.js';
-import { IData, IPatch } from './types.js';
+import XMLClass from './xmlClass.js';
+
+import { IData, IPatch, MethodType } from './types.js';
 
 // Константы для примера
 // const postData: IData = {
@@ -23,33 +25,42 @@ import { IData, IPatch } from './types.js';
 // -----------------------
 
 class Facade {
+  typeRequest: MethodType;
+  constructor(typeRequest: MethodType) {
+    this.typeRequest = typeRequest;
+  }
+
   getTask(taskId: number): void {
-    return new FetchClass().getTask(taskId);
+    return this.typeRequest === 'fetch' ? new FetchClass().getTask(taskId) : new XMLClass().getTask(taskId);
   }
 
   getAllTasks(): void {
-    return new FetchClass().getAllTasks();
+    return this.typeRequest === 'fetch' ? new FetchClass().getAllTasks() : new XMLClass().getAllTasks();
   }
 
   postTask(postData: IData): void {
-    return new FetchClass().postTask(postData);
+    return this.typeRequest === 'fetch' ? new FetchClass().postTask(postData) : new XMLClass().postTask(postData);
   }
 
   putTask(taskId: number, putData: IData): void {
-    return new FetchClass().putTask(taskId, putData);
+    return this.typeRequest === 'fetch'
+      ? new FetchClass().putTask(taskId, putData)
+      : new XMLClass().putTask(taskId, putData);
   }
 
   patchTask(taskId: number, patchData: IPatch): void {
-    return new FetchClass().patchTask(taskId, patchData);
+    return this.typeRequest === 'fetch'
+      ? new FetchClass().patchTask(taskId, patchData)
+      : new XMLClass().patchTask(taskId, patchData);
   }
 
   deleteTask(taskId: number): void {
-    return new FetchClass().deleteTask(taskId);
+    return this.typeRequest === 'fetch' ? new FetchClass().deleteTask(taskId) : new XMLClass().deleteTask(taskId);
   }
 }
 
 // Метод запроса (fetch или XMLHttpRequest) меняется в зависимости от аргумента,
-// передаваемого в конструктор класса Facade ("fetch" или что-то иное)
+// передаваемого в конструктор класса Facade ("fetch" или "xml")
 
-const work = new Facade();
-work.getAllTasks();
+const work = new Facade('fetch');
+work.getTask(40);
